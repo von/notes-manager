@@ -14,11 +14,10 @@ function archive() {
 
   targetBody.appendHorizontalRule()
 
-  preambleEndElement = baseBody.findElement(DocumentApp.ElementType.HORIZONTAL_RULE, null)
-  if ( preambleEndElement == null) {
-    preambleIndex = 0; // No preamble, start with top of document
-  } else {
-    preambleIndex = baseBody.getChildIndex(preambleEndElement.getElement().getParent())
+  preambleIndex = preambleEndIndex(baseBody)
+  if ( preambleIndex == -1 ) {
+    // No preamble, start at begining of document
+    preambleIndex = 0
   }
 
   var totalElements = baseBody.getNumChildren();
@@ -44,14 +43,12 @@ function archive() {
   }
 }
 
-function parsePreamble(body) {
-  var totalElements = body.getNumChildren();
-  for( var j = 0; j < totalElements; ++j ) {
-    var child = body.getChild(j);
-    if ( child.getType() == DocumentApp.ElementType.HORIZONTAL_RULE ) {
-      return j;
-    }
+function preambleEndIndex(body) {
+  preambleEndElement = body.findElement(
+      DocumentApp.ElementType.HORIZONTAL_RULE,
+      null)
+  if ( preambleEndElement == null) {
+    return -1; // No preamble
   }
-  // No preamble
-  return 0
+  return body.getChildIndex(preambleEndElement.getElement().getParent())
 }
