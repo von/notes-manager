@@ -26,19 +26,7 @@ function archive() {
   }
 
   var totalElements = baseBody.getNumChildren();
-  for( var j = preambleIndex + 1; j < totalElements; ++j ) {
-    var child = baseBody.getChild(j);
-    var element = child.copy();
-    var type = element.getType();
-    if( type == DocumentApp.ElementType.PARAGRAPH )
-      targetBody.appendParagraph(element);
-    else if( type == DocumentApp.ElementType.TABLE )
-      targetBody.appendTable(element);
-    else if( type == DocumentApp.ElementType.LIST_ITEM )
-      targetBody.appendListItem(element);
-    else
-      throw new Error("Unknown element type: "+type);
-  }
+  appendToBody(baseBody, preambleIndex + 1, targetBody)
 
   // Cannot delete last element, so clear it intead
   baseBody.getChild(totalElements - 1).clear()
@@ -62,4 +50,21 @@ function getArchiveUrl(body) {
   archiveElement = body.findText("Notes Archive")
   textObj = archiveElement.getElement().editAsText()
   return textObj.getLinkUrl(archiveElement.getStartOffset())
+}
+
+function appendToBody(srcBody, srcStartingIndex, targetBody) {
+  var totalElements = srcBody.getNumChildren();
+  for( var j = srcStartingIndex; j < totalElements; ++j ) {
+    var child = srcBody.getChild(j);
+    var element = child.copy();
+    var type = element.getType();
+    if( type == DocumentApp.ElementType.PARAGRAPH )
+      targetBody.appendParagraph(element);
+    else if( type == DocumentApp.ElementType.TABLE )
+      targetBody.appendTable(element);
+    else if( type == DocumentApp.ElementType.LIST_ITEM )
+      targetBody.appendListItem(element);
+    else
+      throw new Error("Unknown element type: "+type);
+  }
 }
