@@ -3,6 +3,7 @@
 function onOpen() {
   DocumentApp.getUi().createAddonMenu()
       .addItem('Archive', 'archive')
+      .addItem('Insert Template', 'insertTemplate')
       .addToUi();
 }
 
@@ -35,6 +36,20 @@ function archive() {
   }
 }
 
+function insertTemplate() {
+  var baseDoc = DocumentApp.getActiveDocument()
+  var baseBody = baseDoc.getActiveSection();
+
+  var templateUrl = getTemplateUrl(baseBody)
+  if ( templateUrl == null) {
+      throw new Error("No template URL found.");
+  }
+  var templateDoc = DocumentApp.openByUrl(templateUrl)
+  var templateBody = templateDoc.getActiveSection();
+
+  appendToBody(templateBody, 0, baseBody)
+}
+
 function preambleEndIndex(body) {
   preambleEndElement = body.findElement(
       DocumentApp.ElementType.HORIZONTAL_RULE,
@@ -47,6 +62,12 @@ function preambleEndIndex(body) {
 
 function getArchiveUrl(body) {
   archiveElement = body.findText("Notes Archive")
+  textObj = archiveElement.getElement().editAsText()
+  return textObj.getLinkUrl(archiveElement.getStartOffset())
+}
+
+function getTemplateUrl(body) {
+  archiveElement = body.findText("Notes Template")
   textObj = archiveElement.getElement().editAsText()
   return textObj.getLinkUrl(archiveElement.getStartOffset())
 }
