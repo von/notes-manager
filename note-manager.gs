@@ -17,8 +17,6 @@ function archive() {
   var targetDoc = DocumentApp.openByUrl(targetUrl)
   var targetBody = targetDoc.getActiveSection();
 
-  targetBody.appendHorizontalRule()
-
   preambleIndex = preambleEndIndex(baseBody)
   if ( preambleIndex == -1 ) {
     // No preamble, start at begining of document
@@ -26,7 +24,8 @@ function archive() {
   }
 
   var totalElements = baseBody.getNumChildren();
-  appendToBody(baseBody, preambleIndex + 1, targetBody)
+  endIndex = prependToBody(baseBody, preambleIndex + 1, targetBody)
+  targetBody.insertHorizontalRule(endIndex)
 
   // Cannot delete last element, so clear it intead
   baseBody.getChild(totalElements - 1).clear()
@@ -67,4 +66,24 @@ function appendToBody(srcBody, srcStartingIndex, targetBody) {
     else
       throw new Error("Unknown element type: "+type);
   }
+}
+
+function prependToBody(srcBody, srcStartingIndex, targetBody) {
+  var totalElements = srcBody.getNumChildren();
+  var targetIndex = 0
+  for( var j = srcStartingIndex; j < totalElements; ++j ) {
+    var child = srcBody.getChild(j);
+    var element = child.copy();
+    var type = element.getType();
+    if( type == DocumentApp.ElementType.PARAGRAPH )
+      targetBody.insertParagraph(targetIndex, element);
+    else if( type == DocumentApp.ElementType.TABLE )
+      targetBody.insertTable(targetIndex, element);
+    else if( type == DocumentApp.ElementType.LIST_ITEM )
+      targetBody.insertListItem(targetIndex, element);
+    else
+      throw new Error("Unknown element type: "+type);
+    targetIndex++;
+  }
+  return targetIndex;
 }
