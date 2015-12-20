@@ -9,7 +9,12 @@ function onOpen() {
 function archive() {
   var baseDoc = DocumentApp.getActiveDocument()
   var baseBody = baseDoc.getActiveSection();
-  var targetDoc = DocumentApp.openByUrl("https://docs.google.com/document/d/1GelPKmYV2EQLZ_lI-DEmrcONOvRph8cIFRZLV-JvW-M/edit")
+
+  var targetUrl = getArchiveUrl(baseBody)
+  if ( targetUrl == null) {
+      throw new Error("No archive URL found.");
+  }
+  var targetDoc = DocumentApp.openByUrl(targetUrl)
   var targetBody = targetDoc.getActiveSection();
 
   targetBody.appendHorizontalRule()
@@ -51,4 +56,10 @@ function preambleEndIndex(body) {
     return -1; // No preamble
   }
   return body.getChildIndex(preambleEndElement.getElement().getParent())
+}
+
+function getArchiveUrl(body) {
+  archiveElement = body.findText("Notes Archive")
+  textObj = archiveElement.getElement().editAsText()
+  return textObj.getLinkUrl(archiveElement.getStartOffset())
 }
