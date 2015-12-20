@@ -37,7 +37,7 @@ function archive() {
     else if( type == DocumentApp.ElementType.LIST_ITEM )
       targetBody.appendListItem(element);
     else
-      throw new Error("According to the doc this type couldn't appear in the body: "+type);
+      throw new Error("Unknown element type: "+type);
   }
 
   // Cannot delete last element, so clear it intead
