@@ -11,6 +11,12 @@ function archive() {
   var baseDoc = DocumentApp.getActiveDocument()
   var baseBody = baseDoc.getActiveSection();
 
+  preambleIndex = preambleEndIndex(baseBody)
+  if ( preambleIndex == -1 ) {
+    // No preamble, start at begining of document
+    preambleIndex = 0
+  }
+
   var targetUrl = getArchiveUrl(baseBody)
   if ( targetUrl == null) {
       throw new Error("No archive URL found.");
@@ -18,14 +24,14 @@ function archive() {
   var targetDoc = DocumentApp.openByUrl(targetUrl)
   var targetBody = targetDoc.getActiveSection();
 
-  preambleIndex = preambleEndIndex(baseBody)
-  if ( preambleIndex == -1 ) {
+  targetIndex = preambleEndIndex(targetBody)
+  if ( targetIndex == -1 ) {
     // No preamble, start at begining of document
-    preambleIndex = 0
+    targetIndex = 0
   }
 
   var totalElements = baseBody.getNumChildren();
-  endIndex = prependToBody(baseBody, preambleIndex + 1, targetBody)
+  endIndex = prependToBody(baseBody, preambleIndex + 1, targetBody, targetIndex + 1)
   targetBody.insertHorizontalRule(endIndex)
 
   // Cannot delete last element, so clear it intead
@@ -89,9 +95,8 @@ function appendToBody(srcBody, srcStartingIndex, targetBody) {
   }
 }
 
-function prependToBody(srcBody, srcStartingIndex, targetBody) {
+function prependToBody(srcBody, srcStartingIndex, targetBody, targetIndex) {
   var totalElements = srcBody.getNumChildren();
-  var targetIndex = 0
   for( var j = srcStartingIndex; j < totalElements; ++j ) {
     var child = srcBody.getChild(j);
     var element = child.copy();

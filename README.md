@@ -33,3 +33,7 @@ Finish creating your Notes document as follows:
 1. Insert your template by selecting `Add-ons > Notes Manager > Insert Template`
 1. Type your notes.
 1. When you are done taking notes, have Notes Manager move them to the archive by selecting `Add-ons > Notes Manager > Archive`
+
+# Archive Document Preamble
+
+The Archive Document can also have a preamble (any text followed by a horizontal line at the top of the document). Any archived notes will be placed after the preamble.
