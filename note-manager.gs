@@ -1,4 +1,7 @@
-// Kudos: http://stackoverflow.com/a/10833393/197789
+// Notes Manager Google Docs Add-on
+// https://github.com/von/notes-manager
+// Version 0.2
+// License: https://creativecommons.org/licenses/by/4.0/
 
 function onOpen() {
   DocumentApp.getUi().createAddonMenu()
@@ -78,6 +81,7 @@ function getTemplateUrl(body) {
   return textObj.getLinkUrl(archiveElement.getStartOffset())
 }
 
+// Kudos: http://stackoverflow.com/a/10833393/197789
 function appendToBody(srcBody, srcStartingIndex, targetBody) {
   var totalElements = srcBody.getNumChildren();
   for( var j = srcStartingIndex; j < totalElements; ++j ) {
