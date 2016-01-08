@@ -22,7 +22,7 @@ Note Manager isn't currently distributed through official channels, so installat
 1. Delete any code in the script editor and paste in note-manaeger.gs
 1. Select the menu item `File > Save all`. Name your new script "Note Manager" and click OK.
 
-Notes manager uses two concepts to manage the notes file:
+Notes Manager uses two concepts to manage the notes file:
 * A preamble, that is a hunk of text up to the firt horizontal line in the file. Notes Manager will not modify this text. You can use it to put static information about your meeting.
 * You will also put links to your archive and template in the preamble. Hyperlinked text in the preamble is used by Notes Manager to find the archive and template for the notes file.
 
