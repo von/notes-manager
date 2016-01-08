@@ -43,3 +43,7 @@ Finish creating your Notes document as follows:
 # Archive Document Preamble
 
 The Archive Document can also have a preamble (any text followed by a horizontal line at the top of the document). Any archived notes will be placed after the preamble.
+
+# Warning
+
+Notes Manager is still new and untested. Use at your own risk.
