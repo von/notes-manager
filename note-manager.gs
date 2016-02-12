@@ -57,6 +57,11 @@ function deleteBody() {
   var baseBody = baseDoc.getActiveSection();
 
   var totalElements = baseBody.getNumChildren();
+  var preambleIndex = preambleEndIndex(baseBody)
+  if ( preambleIndex == -1 ) {
+    // No preamble, start at begining of document
+    preambleIndex = 0
+  }
 
   // Cannot delete last element, so clear it intead
   baseBody.getChild(totalElements - 1).clear()
