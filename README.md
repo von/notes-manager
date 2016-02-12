@@ -38,7 +38,8 @@ Finish creating your Notes document as follows:
 1. Open your Notes Document.
 1. Insert your template by selecting `Add-ons > Notes Manager > Insert Template`
 1. Type your notes.
-1. When you are done taking notes, have Notes Manager move them to the archive by selecting `Add-ons > Notes Manager > Archive`
+1. When you are done taking notes, have Notes Manager copy them to the archive by selecting `Add-ons > Notes Manager > Archive`
+1. You can delete your notes with `Add-ons > Notes Manager > Delete Body`
 
 # Archive Document Preamble
 
