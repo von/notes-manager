@@ -2,7 +2,7 @@
 
 Notes Manager is an add-on for Google docs. It goal is to support a workflow in which you have one document that has the latest notes for a recurring meeting and those notes get moved to an archive document after each meeting and replaced with a template for the next meeting. This lets all meeting participants find the current meeting notes in a document which doesn't change and stays a manageable size, and the archive in a well defined place.
 
-Version: 0.2
+Version: 0.4
 
 Homepage: https://github.com/von/notes-manager
 
