@@ -1,6 +1,6 @@
 // Notes Manager Google Docs Add-on
 // https://github.com/von/notes-manager
-// Version 0.2
+// Version 0.3
 // License: https://creativecommons.org/licenses/by/4.0/
 
 function onOpen() {
@@ -92,9 +92,11 @@ function appendToBody(srcBody, srcStartingIndex, targetBody) {
       targetBody.appendParagraph(element);
     else if( type == DocumentApp.ElementType.TABLE )
       targetBody.appendTable(element);
-    else if( type == DocumentApp.ElementType.LIST_ITEM )
-      targetBody.appendListItem(element);
-    else
+    else if( type == DocumentApp.ElementType.LIST_ITEM ) {
+      newItem = targetBody.appendListItem(element);
+      newItem.setNestingLevel(child.getNestingLevel());
+      newItem.setGlyphType(child.getGlyphType());
+    } else
       throw new Error("Unknown element type: "+type);
   }
 }
@@ -109,9 +111,11 @@ function prependToBody(srcBody, srcStartingIndex, targetBody, targetIndex) {
       targetBody.insertParagraph(targetIndex, element);
     else if( type == DocumentApp.ElementType.TABLE )
       targetBody.insertTable(targetIndex, element);
-    else if( type == DocumentApp.ElementType.LIST_ITEM )
-      targetBody.insertListItem(targetIndex, element);
-    else
+    else if( type == DocumentApp.ElementType.LIST_ITEM ) {
+      newItem = targetBody.insertListItem(targetIndex, element);
+      newItem.setNestingLevel(child.getNestingLevel());
+      newItem.setGlyphType(child.getGlyphType());
+    } else
       throw new Error("Unknown element type: "+type);
     targetIndex++;
   }
