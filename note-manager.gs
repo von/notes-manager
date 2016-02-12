@@ -1,11 +1,12 @@
 // Notes Manager Google Docs Add-on
 // https://github.com/von/notes-manager
-// Version 0.3
+// Version 0.4
 // License: https://creativecommons.org/licenses/by/4.0/
 
 function onOpen() {
   DocumentApp.getUi().createAddonMenu()
       .addItem('Archive', 'archive')
+      .addItem('Delete Body', 'deleteBody')
       .addItem('Insert Template', 'insertTemplate')
       .addToUi();
 }
@@ -33,16 +34,8 @@ function archive() {
     targetIndex = 0
   }
 
-  var totalElements = baseBody.getNumChildren();
   endIndex = prependToBody(baseBody, preambleIndex + 1, targetBody, targetIndex + 1)
   targetBody.insertHorizontalRule(endIndex)
-
-  // Cannot delete last element, so clear it intead
-  baseBody.getChild(totalElements - 1).clear()
-  for( var j = totalElements - 2; j > preambleIndex; --j ) {
-    var child = baseBody.getChild(j);
-    baseBody.removeChild(child);
-  }
 }
 
 function insertTemplate() {
@@ -58,6 +51,21 @@ function insertTemplate() {
 
   appendToBody(templateBody, 0, baseBody)
 }
+
+function deleteBody() {
+  var baseDoc = DocumentApp.getActiveDocument()
+  var baseBody = baseDoc.getActiveSection();
+
+  var totalElements = baseBody.getNumChildren();
+
+  // Cannot delete last element, so clear it intead
+  baseBody.getChild(totalElements - 1).clear()
+  for( var j = totalElements - 2; j > preambleIndex; --j ) {
+    var child = baseBody.getChild(j);
+    baseBody.removeChild(child);
+  }
+}
+
 
 function preambleEndIndex(body) {
   preambleEndElement = body.findElement(
