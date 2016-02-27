@@ -48,3 +48,7 @@ The Archive Document can also have a preamble (any text followed by a horizontal
 # Warning
 
 Notes Manager is still new and untested. Use at your own risk.
+
+# Notes
+
+It can take Notes Manager a while to archive a big document.
