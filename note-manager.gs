@@ -1,6 +1,6 @@
 // Notes Manager Google Docs Add-on
 // https://github.com/von/notes-manager
-// Version 0.4
+// Version 0.5
 // License: https://creativecommons.org/licenses/by/4.0/
 
 function onOpen() {
@@ -97,6 +97,10 @@ function getTemplateUrl(body) {
 // Kudos: http://stackoverflow.com/a/10833393/197789
 function appendToBody(srcBody, srcStartingIndex, targetBody) {
   var totalElements = srcBody.getNumChildren();
+  // Array mapping List Ids to temporary list items to ensure
+  // unique list Ids.
+  // Kudos: http://stackoverflow.com/a/37278889/197789
+  var listItemDictionary = {};
   for( var j = srcStartingIndex; j < totalElements; ++j ) {
     var child = srcBody.getChild(j);
     var element = child.copy();
@@ -109,13 +113,35 @@ function appendToBody(srcBody, srcStartingIndex, targetBody) {
       newItem = targetBody.appendListItem(element);
       newItem.setNestingLevel(child.getNestingLevel());
       newItem.setGlyphType(child.getGlyphType());
+      // Make sure new list item has a unique Id in the document by
+      // creating a new list item for each list we copy in and using
+      // the new item's Id.
+      newItemId = newItem.getListId()
+      if (listItemDictionary[newItemId] == null) {
+        // First time we have seen this list, create a new Id
+        // Saving item so we don't reuse id.
+        var tempItem = targetBody.appendListItem("temp")
+        listItemDictionary[newItemId] = tempItem;
+      }
+      newItem.setListId(listItemDictionary[newItemId])
     } else
       throw new Error("Unknown element type: "+type);
+  }
+  // Clean up temporary list Ids
+  if(listItemDictionary){
+    targetBody.appendParagraph("");
+    for(var key in listItemDictionary){
+      listItemDictionary[key].clear().removeFromParent()
+    }
   }
 }
 
 function prependToBody(srcBody, srcStartingIndex, targetBody, targetIndex) {
   var totalElements = srcBody.getNumChildren();
+  // Array mapping List Ids to temporary list items to ensure
+  // unique list Ids.
+  // Kudos: http://stackoverflow.com/a/37278889/197789
+  var listItemDictionary = {};
   for( var j = srcStartingIndex; j < totalElements; ++j ) {
     var child = srcBody.getChild(j);
     var element = child.copy();
@@ -128,9 +154,27 @@ function prependToBody(srcBody, srcStartingIndex, targetBody, targetIndex) {
       newItem = targetBody.insertListItem(targetIndex, element);
       newItem.setNestingLevel(child.getNestingLevel());
       newItem.setGlyphType(child.getGlyphType());
+      // Make sure new list item has a unique Id in the document by
+      // creating a new list item for each list we copy in and using
+      // the new item's Id.
+      newItemId = newItem.getListId()
+      if (listItemDictionary[newItemId] == null) {
+        // First time we have seen this list, create a new Id
+        // Saving item so we don't reuse id.
+        var tempItem = targetBody.appendListItem("temp")
+        listItemDictionary[newItemId] = tempItem;
+      }
+      newItem.setListId(listItemDictionary[newItemId])
     } else
       throw new Error("Unknown element type: "+type);
     targetIndex++;
+  }
+  // Clean up temporary list Ids
+  if(listItemDictionary){
+    targetBody.appendParagraph("");
+    for(var key in listItemDictionary){
+      listItemDictionary[key].clear().removeFromParent()
+    }
   }
   return targetIndex;
 }
